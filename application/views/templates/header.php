@@ -35,6 +35,9 @@
             </ul>
             <ul class="navbar-nav navbar-right">
                 <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url(); ?>users/register">Register</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url(); ?>posts/create">Create Post</a>
                 </li>
                 <li class="nav-item">
@@ -46,3 +49,13 @@
     </nav>
     <!-- nav baer -->
     <div class="container">
+        <?php if ($this->session->flashdata('user_registered')) : ?>
+            <?php echo '<p class="alert alert-success">' . $this->session->flashdata('user_registered') . ' </p>'; ?>
+
+        <?php endif; ?>
+
+
+        <?php if ($this->session->flashdata('post_created')) : ?>
+            <?php echo '<p class="alert alert success">' . $this->session->flashdata('post_created') . ' </p>'; ?>
+
+        <?php endif; ?>
