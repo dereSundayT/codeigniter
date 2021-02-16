@@ -25,6 +25,58 @@ class Users extends CI_Controller
     }
 
     // 
+
+    public function login()
+    {
+        $data['title'] = 'Login ';
+
+        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+
+        if ($this->form_validation->run() === FALSE) {
+            $this->load->view('templates/header');
+            $this->load->view('users/login', $data);
+            $this->load->view('templates/footer');
+        } else {
+            //
+            $username = $this->input->post('username');
+            //Encrypt Password
+            $password = md5($this->input->post('password'));
+
+
+            $user_id = $this->user_model->login($username, $password);
+
+            if ($user_id) {
+                //create sesiion
+                $user_data = array(
+                    'user_id' => $user_id,
+                    'username' => $username, 'logged_in' => true
+                );
+                $this->session->set_userdata($user_data);
+                $this->session->set_flashdata('user_loggedin', 'You are not registered and can Log In');
+                redirect('posts');
+            } else {
+                //
+                $this->session->set_flashdata('login_failed', 'Login is invalid');
+                redirect('users/login');
+            }
+            ///set message
+
+
+        }
+    }
+
+
+    public function logout()
+    {
+        // unset user data
+        $this->session->unset_userdata("logged_in");
+        $this->session->unset_userdata("user_id");
+        $this->session->unset_userdata("username");
+        //set message
+        // redirect to login form
+        redirect('users/login');
+    }
     public function check_username_exists($username)
     {
         $this->form_validation->set_message('check_username_exists', 'That username is taken. Please Choose a different one');

@@ -30,6 +30,11 @@ class Posts extends CI_Controller
 
     public function create()
     {
+        // check if login
+        if (!$this->session->userdata('logged_in')) {
+            redirect('users/login');
+        }
+
         $data['title'] = 'Create Post';
         $data['categories'] = $this->post_model->get_categories();
 
